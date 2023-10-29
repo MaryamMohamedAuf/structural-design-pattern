@@ -1,0 +1,48 @@
+using System;
+
+// The subject interface that both the RealSubject and Proxy classes will implement.
+public interface ISubject
+{
+    void Request();
+}
+
+// The RealSubject class, which contains the actual implementation of the request.
+public class RealSubject : ISubject
+{
+    public void Request()
+    {
+        Console.WriteLine("RealSubject: Handling request.");
+    }
+}
+
+// The Proxy class, which acts as a middleman between the client and the RealSubject.
+public class Proxy : ISubject
+{
+    private RealSubject realSubject;
+
+    public void Request()
+    {
+        // Lazy initialization: Create the RealSubject only when it's actually needed.
+        if (realSubject == null)
+        {
+            Console.WriteLine("Proxy: Creating RealSubject instance.");
+            realSubject = new RealSubject();
+        }
+
+        Console.WriteLine("Proxy: Forwarding request to RealSubject.");
+        realSubject.Request();
+    }
+}
+
+// Client code
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create a proxy instance and make a request through it.
+        Proxy proxy = new Proxy();
+        proxy.Request();
+
+        Console.ReadLine();
+    }
+}
